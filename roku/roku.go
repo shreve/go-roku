@@ -35,20 +35,6 @@ const (
 	InputAV1 = "InputAV1"
 )
 
-type AppList struct {
-	Apps []App `xml:"app"`
-}
-
-type ActiveApp struct {
-	XMLName xml.Name `xml:"active-app"`
-	App App `xml:"app"`
-}
-
-type App struct {
-	Id string  `xml:"id,attr"`
-	Name string
-}
-
 type RokuInfo struct {
 	UDN string `xml:"udn"`
 	SerialNumber string `xml:"serial-number"`
@@ -87,6 +73,20 @@ type RokuInfo struct {
 	ClockFormat string `xml:"clock-format"`
 	Uptime uint `xml:"uptime"`
 	PowerMode string `xml:"power-mode"`
+}
+
+type AppList struct {
+	Apps []App `xml:"app"`
+}
+
+type ActiveApp struct {
+	XMLName xml.Name `xml:"active-app"`
+	App App `xml:"app"`
+}
+
+type App struct {
+	Id string  `xml:"id,attr"`
+	Name string
 }
 
 func (a *App) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
