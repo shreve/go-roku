@@ -35,7 +35,7 @@ const (
 	InputAV1 = "InputAV1"
 )
 
-type RokuInfo struct {
+type DeviceInfo struct {
 	UDN string `xml:"udn"`
 	SerialNumber string `xml:"serial-number"`
 	DeviceId string `xml:"device-id"`

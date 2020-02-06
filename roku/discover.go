@@ -5,14 +5,16 @@ import (
 	"bytes"
 	"log"
 	"regexp"
+	"time"
 )
 
 const ssdpAddr = "239.255.255.250:1900"
 const searchRequest =
 `M-SEARCH * HTTP/1.1
 Host: 239.255.255.250:1900
-Man: \"ssdp:discover\"
-ST: roku:ecp\n\n`
+Man: "ssdp:discover"
+ST: roku:ecp
+` // Extra newline required
 
 func Discover() (Client, error) {
 
@@ -32,6 +34,7 @@ func Discover() (Client, error) {
 
 		// Read in responses (UDP datagrams typically 8kb)
 		buf := make([]byte, 8192)
+		sock.SetReadDeadline(time.Now().Add(time.Second * 3))
 		_, _, err := sock.ReadFrom(buf)
 		if err != nil { return client, err }
 
