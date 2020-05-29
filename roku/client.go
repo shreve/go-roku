@@ -1,6 +1,7 @@
 package roku
 
 import (
+	"errors"
 	"net/http"
 	"net/url"
 	"fmt"
@@ -8,7 +9,9 @@ import (
 	"encoding/xml"
 )
 
-func Connect(addr string) (Client, error) {
+var ClientNotReady = errors.New("The client is not yet ready.")
+
+func Connect(addr string) Client {
 	if addr[0:4] != "http" {
 		addr = "http://" + addr
 	}
@@ -18,13 +21,17 @@ func Connect(addr string) (Client, error) {
 	if url.Port() == "" {
 		url.Host += ":8060"
 	}
-	return Client{true, url.String(), &http.Client{}}, nil
+	return Client{true, url.String(), &http.Client{}}
 }
 
 type Client struct {
-	Ready bool
+	ready bool
 	Address string
 	client *http.Client
+}
+
+func (c *Client) Ready() bool {
+	return c.ready
 }
 
 func (c *Client) Apps() []App {
@@ -63,8 +70,8 @@ func (c *Client) Keypress(key string) error {
 	return c.post("keypress/" + key)
 }
 
-func (c *Client) Launch(appId int) error {
-	return c.post(fmt.Sprintf("launch/%d", appId))
+func (c *Client) Launch(appId string) error {
+	return c.post(fmt.Sprintf("launch/%s", appId))
 }
 
 func (c *Client) Install(appId int) error {
@@ -72,6 +79,9 @@ func (c *Client) Install(appId int) error {
 }
 
 func (c *Client) get(path string) ([]byte, error) {
+	if !c.ready {
+		return []byte{}, ClientNotReady
+	}
 	url := c.Address + path
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil { return []byte{}, err }
@@ -81,6 +91,9 @@ func (c *Client) get(path string) ([]byte, error) {
 }
 
 func (c *Client) post(path string) error {
+	if !c.ready {
+		return ClientNotReady
+	}
 	url := c.Address + path
 	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {

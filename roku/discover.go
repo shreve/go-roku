@@ -52,6 +52,6 @@ func Discover() (Client, error) {
 			continue
 		}
 
-		return Connect(string(address[1]))
+		return Connect(string(address[1])), nil
 	}
 }
