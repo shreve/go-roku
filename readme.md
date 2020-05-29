@@ -3,7 +3,40 @@ Roku ECP Client
 
 This is a go port of the [Roku ECP Client](https://github.com/shreve/roku-ecp) I wrote in Ruby.
 
-## Usage
+## TUI Client Usage
+
+Install then run the client
+
+```
+$ go install github.com/shreve/go-roku/cmd/roku
+
+$ roku
+```
+
+This runs an interactive remote control program. By default, it scans the
+network and connects to the first Roku device it finds. If you'd prefer to
+hard-code the address, use the environment variable `$ROKU_HOST`.
+
+Here are some of the key bindings
+
+| Key             | Command                                           |
+|-----------------|---------------------------------------------------|
+| arrow keys      | navigation                                        |
+| h/j/k/l         | vi-style navigation                               |
+| ctrl+up/down    | volume up/down                                    |
+| ctrl+left/right | toggle mute                                       |
+| space bar       | play/pause                                        |
+| asterisk        | info/options (asterisk button on physical remote) |
+| esc             | back/exit                                         |
+| backspace       | back/exit                                         |
+| enter           | select                                            |
+| ctrl+q          | power off                                         |
+| q               | quit the remote app                               |
+| ctrl+c          | quit the remote app                               |
+| o               | open app (search interface)                       |
+
+
+## Library Usage
 
 Create a client for a Roku device by passing it's IP to `Connect`. If you don't know the IP, you can search the network for it with `Discover`
 
