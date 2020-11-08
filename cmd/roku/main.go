@@ -41,9 +41,8 @@ func main() {
 		if host != "" {
 			client = roku.Connect(host)
 		} else {
-			client, err = roku.Discover()
-			if err != nil {
-				app.Panic("Unable to find Roku device")
+			for err == nil {
+				client, err = roku.Discover()
 			}
 		}
 		info, _ = client.DeviceInfo()
