@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 )
@@ -35,34 +34,41 @@ func (c *Client) Ready() bool {
 	return c.ready
 }
 
-func (c *Client) Apps() []App {
+func (c *Client) Apps() (list []App, err error) {
 	body, err := c.get("query/apps")
 	if err != nil {
-		panic(err)
+		return
 	}
-	al := AppList{}
-	xml.Unmarshal(body, &al)
-	return al.Apps
+	xml.Unmarshal(body, &list)
+	return
 }
 
-func (c *Client) ActiveApp() App {
+func (c *Client) ActiveApp() (App, error) {
 	body, err := c.get("query/active-app")
 	if err != nil {
-		panic(err)
+		return App{}, err
 	}
 	aa := ActiveApp{}
 	xml.Unmarshal(body, &aa)
-	return aa.App
+	return aa.App, nil
 }
 
-func (c *Client) DeviceInfo() DeviceInfo {
+func (c *Client) DeviceInfo() (info DeviceInfo, err error) {
 	body, err := c.get("query/device-info")
 	if err != nil {
-		panic(err)
+		return
 	}
-	info := DeviceInfo{}
 	xml.Unmarshal(body, &info)
-	return info
+	return
+}
+
+func (c *Client) MediaPlayer() (player Player, err error) {
+	body, err := c.get("query/media-player")
+	if err != nil {
+		return
+	}
+	xml.Unmarshal(body, &player)
+	return
 }
 
 func (c *Client) Keyup(key string) error {
@@ -85,30 +91,18 @@ func (c *Client) Install(appId int) error {
 	return c.post(fmt.Sprintf("install/%d", appId))
 }
 
-func (c *Client) MediaPlayer() Player {
-	body, err := c.get("query/media-player")
-	if err != nil {
-		panic(err)
-	}
-	player := Player{}
-	xml.Unmarshal(body, &player)
-	log.Println(string(body))
-	log.Println(player.IsLive, player.Format.Video)
-	return player
-}
-
-func (c *Client) get(path string) ([]byte, error) {
+func (c *Client) get(path string) (body []byte, err error) {
 	if !c.ready {
 		return []byte{}, ClientNotReady
 	}
 	url := c.Address + path
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return []byte{}, err
+		return
 	}
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return []byte{}, err
+		return
 	}
 	return ioutil.ReadAll(resp.Body)
 }

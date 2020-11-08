@@ -78,7 +78,6 @@ client.Launch(apps[len(apps)-1].Id)
 
 ## Todo
 
-* Better error handling than panic
 * Allow retrying discovery rather than quitting in place
 
 ## Wishlist

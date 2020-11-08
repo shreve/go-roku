@@ -77,7 +77,7 @@ func (m *MainMode) Render(height, width int) tui.View {
 	if !client.Ready() {
 		view[0] = "Searching for Roku device..."
 	} else {
-		app := client.ActiveApp()
+		app, _ := client.ActiveApp()
 		name := info.FriendlyDeviceName
 		view[0] = "Current Roku: " + name + "          Uptime: " + humanTime(info.Uptime)
 		view[1] = "Current App: " + app.Name
