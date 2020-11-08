@@ -75,3 +75,15 @@ fmt.Println(app.Name)
 apps := client.Apps()
 client.Launch(apps[len(apps)-1].Id)
 ```
+
+## Todo
+
+* Better error handling than panic
+* Allow retrying discovery rather than quitting in place
+
+## Wishlist
+
+* Add help screen to app
+* Better reporting in app
+* Onscreen keyboard tool
+* Create MPRIS daemon to allow controlling remote device with media keys
