@@ -41,8 +41,11 @@ func main() {
 		if host != "" {
 			client = roku.Connect(host)
 		} else {
-			for err == nil {
+			for {
 				client, err = roku.Discover()
+				if err == nil {
+					break
+				}
 			}
 		}
 		info, _ = client.DeviceInfo()
