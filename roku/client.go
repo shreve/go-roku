@@ -1,12 +1,13 @@
 package roku
 
 import (
+	"encoding/xml"
 	"errors"
-	"net/http"
-	"net/url"
 	"fmt"
 	"io/ioutil"
-	"encoding/xml"
+	"log"
+	"net/http"
+	"net/url"
 )
 
 var ClientNotReady = errors.New("The client is not yet ready.")
@@ -25,9 +26,9 @@ func Connect(addr string) Client {
 }
 
 type Client struct {
-	ready bool
+	ready   bool
 	Address string
-	client *http.Client
+	client  *http.Client
 }
 
 func (c *Client) Ready() bool {
@@ -36,7 +37,9 @@ func (c *Client) Ready() bool {
 
 func (c *Client) Apps() []App {
 	body, err := c.get("query/apps")
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	al := AppList{}
 	xml.Unmarshal(body, &al)
 	return al.Apps
@@ -44,7 +47,9 @@ func (c *Client) Apps() []App {
 
 func (c *Client) ActiveApp() App {
 	body, err := c.get("query/active-app")
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	aa := ActiveApp{}
 	xml.Unmarshal(body, &aa)
 	return aa.App
@@ -52,7 +57,9 @@ func (c *Client) ActiveApp() App {
 
 func (c *Client) DeviceInfo() DeviceInfo {
 	body, err := c.get("query/device-info")
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	info := DeviceInfo{}
 	xml.Unmarshal(body, &info)
 	return info
@@ -78,15 +85,31 @@ func (c *Client) Install(appId int) error {
 	return c.post(fmt.Sprintf("install/%d", appId))
 }
 
+func (c *Client) MediaPlayer() Player {
+	body, err := c.get("query/media-player")
+	if err != nil {
+		panic(err)
+	}
+	player := Player{}
+	xml.Unmarshal(body, &player)
+	log.Println(string(body))
+	log.Println(player.IsLive, player.Format.Video)
+	return player
+}
+
 func (c *Client) get(path string) ([]byte, error) {
 	if !c.ready {
 		return []byte{}, ClientNotReady
 	}
 	url := c.Address + path
 	req, err := http.NewRequest("GET", url, nil)
-	if err != nil { return []byte{}, err }
+	if err != nil {
+		return []byte{}, err
+	}
 	resp, err := c.client.Do(req)
-	if err != nil { return []byte{}, err }
+	if err != nil {
+		return []byte{}, err
+	}
 	return ioutil.ReadAll(resp.Body)
 }
 

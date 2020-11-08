@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+
 	"github.com/shreve/go-roku/roku"
 	"github.com/shreve/tui"
 	"github.com/shreve/tui/ansi"
@@ -18,7 +19,7 @@ func (o *OpenAppMode) InputHandler(in string) {
 		app.SetMode(Main)
 	case "\u007F":
 		if len(o.query) > 0 {
-			o.query = o.query[0:len(o.query)-1]
+			o.query = o.query[0 : len(o.query)-1]
 		}
 	case "\r":
 		res := o.findApp()
