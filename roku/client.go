@@ -34,13 +34,14 @@ func (c *Client) Ready() bool {
 	return c.ready
 }
 
-func (c *Client) Apps() (list []App, err error) {
+func (c *Client) Apps() ([]App, error) {
 	body, err := c.get("query/apps")
 	if err != nil {
-		return
+		return []App{}, err
 	}
-	xml.Unmarshal(body, &list)
-	return
+	al := appList{}
+	xml.Unmarshal(body, &al)
+	return al.Apps, nil
 }
 
 func (c *Client) ActiveApp() (App, error) {
@@ -48,7 +49,7 @@ func (c *Client) ActiveApp() (App, error) {
 	if err != nil {
 		return App{}, err
 	}
-	aa := ActiveApp{}
+	aa := activeApp{}
 	xml.Unmarshal(body, &aa)
 	return aa.App, nil
 }

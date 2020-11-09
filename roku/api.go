@@ -1,9 +1,12 @@
+// Roku ECP Client.
+// This is the library for interfacing with Roku devices.
 package roku
 
 import (
 	"encoding/xml"
 )
 
+// These are all the button names that can be submitted as keypresses.
 const (
 	Home          = "Home"
 	Rev           = "Rev"
@@ -35,6 +38,7 @@ const (
 	InputAV1      = "InputAV1"
 )
 
+// Device Info contains all the metadata the Roku device returns about itself.
 type DeviceInfo struct {
 	AdvertisingId               string `xml:"advertising-id"`
 	BuildNumber                 string `xml:"build-number"`
@@ -107,15 +111,19 @@ type DeviceInfo struct {
 	// <expert-pq-enabled>1.0</expert-pq-enabled>
 }
 
-type AppList struct {
-	Apps []App `xml:"app"`
+// Only used for XML parsing. Contains apps.
+type appList struct {
+	XMLName xml.Name `xml:"apps"`
+	Apps    []App    `xml:"app"`
 }
 
-type ActiveApp struct {
+// Only used for XML parsing. Contains one app.
+type activeApp struct {
 	XMLName xml.Name `xml:"active-app"`
 	App     App      `xml:"app"`
 }
 
+// A Roku Channel
 type App struct {
 	Id      string `xml:"id,attr"`
 	Type    string `xml:"type,attr"`
@@ -137,6 +145,7 @@ func (a *App) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	return nil
 }
 
+// Information about the currently playing media
 type Player struct {
 	XMLName  xml.Name `xml:"player"`
 	Error    bool     `xml:"error,attr"`
@@ -147,6 +156,7 @@ type Player struct {
 	Format   Format   `xml:"format"`
 }
 
+// Information about what application is powering the currently playing media
 type Plugin struct {
 	XMLName   xml.Name `xml:"plugin"`
 	Bandwidth string   `xml:"bandwidth,attr"`
@@ -154,6 +164,7 @@ type Plugin struct {
 	Name      string   `xml:"name,attr"`
 }
 
+// Information about the format of the currently playing media
 type Format struct {
 	XMLName  xml.Name `xml:"format"`
 	Audio    string   `xml:"audio,attr"`

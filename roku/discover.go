@@ -15,6 +15,9 @@ Man: "ssdp:discover"
 ST: roku:ecp
 ` // Extra newline required
 
+// Search for a client on the network. This binds a UDP socket, sends out a
+// request, listens for Roku responses, then returns a client prepared with the
+// first answer.
 func Discover() (Client, error) {
 
 	client := Client{}
