@@ -37,14 +37,14 @@ func (m *MainMode) InputHandler(in string) {
 	case "\x1B[D":
 		Press(roku.Left)
 
-	// Control + arrow keys to change volume, sideways to mute
-	case "\x1B[1;5A":
+	// Shift + arrow keys to change volume, sideways to mute
+	case "\x1B[1;2A":
 		Press(roku.VolumeUp)
-	case "\x1B[1;5B":
+	case "\x1B[1;2B":
 		Press(roku.VolumeDown)
-	case "\x1B[1;5C":
+	case "\x1B[1;2C":
 		Press(roku.VolumeMute)
-	case "\x1B[1;5D":
+	case "\x1B[1;2D":
 		Press(roku.VolumeMute)
 
 	// Space bar to play / pause
@@ -82,7 +82,9 @@ func (m *MainMode) Render(height, width int) tui.View {
 		view[0] = "Current Roku: " + name + "          Uptime: " + humanTime(info.Uptime)
 		view[1] = "Current App: " + app.Name
 		view[2] = "Last Button: " + lastPressed
-		view[len(view)-1] = client.Address
+		view[4] = "Client Address: " + client.Address
+		view[len(view)-2] = "Press q to quit, o to open app, h/j/k/l or arrows to navigate, esc to go back"
+		view[len(view)-1] = "shift + arrows to change volume, ctrl + q to power off"
 	}
 
 	return view

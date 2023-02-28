@@ -5,4 +5,5 @@ github.com/shreve/tui v0.0.0-20200518052943-a1167413379a/go.mod h1:gITJqoHQC8PpO
 github.com/shreve/tui/ansi v0.0.0-20191227040747-e717313e9341/go.mod h1:CUYtjaasjjvkAHUZqw22dcvLYjpx5kPsgMoSxG+WKfk=
 github.com/shreve/tui/ansi v0.0.0-20200518052943-a1167413379a h1:QniT2zylJN3WZNykb3IGjyDqR6pg3wAzRSkDNukz10E=
 github.com/shreve/tui/ansi v0.0.0-20200518052943-a1167413379a/go.mod h1:CUYtjaasjjvkAHUZqw22dcvLYjpx5kPsgMoSxG+WKfk=
+golang.org/x/sys v0.0.0-20191224085550-c709ea063b76 h1:Dho5nD6R3PcW2SH1or8vS0dszDaXRxIw55lBX7XiE5g=
 golang.org/x/sys v0.0.0-20191224085550-c709ea063b76/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
